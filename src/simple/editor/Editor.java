@@ -2,8 +2,6 @@ package simple.editor;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,14 +12,14 @@ import java.io.PrintWriter;
 import javax.swing.JEditorPane;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JMenu;
 import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.KeyStroke;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import menu.MenuType;
+import menu.factory.MenuFactory;
 
 @SuppressWarnings("serial")
 public class Editor extends JFrame implements ActionListener, DocumentListener {
@@ -30,10 +28,8 @@ public class Editor extends JFrame implements ActionListener, DocumentListener {
 		new Editor();
 	}
 
-	public JEditorPane textPane;
-	private JMenuBar menu;
-	private JMenuItem copy, paste, cut;
-	public boolean changed = false;
+	private JEditorPane textPane;
+	private boolean changed = false;
 	private File file;
 
 	public Editor() {
@@ -42,85 +38,19 @@ public class Editor extends JFrame implements ActionListener, DocumentListener {
 		add(new JScrollPane(textPane), BorderLayout.CENTER);
 		textPane.getDocument().addDocumentListener(this);
 
-		menu = new JMenuBar();
-		setJMenuBar(menu);
-		buildMenu();
+		createMenuBar();
 
 		setSize(500, 500);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
-	private void buildMenu() {
-		buildFileMenu();
-		buildEditMenu();
-	}
-
-	private void buildFileMenu() {
-		JMenu file = new JMenu("File");
-		file.setMnemonic('F');
-		menu.add(file);
-		JMenuItem n = new JMenuItem("New");
-		n.setMnemonic('N');
-		n.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK));
-		n.addActionListener(this);
-		file.add(n);
-		JMenuItem open = new JMenuItem("Open");
-		file.add(open);
-		open.addActionListener(this);
-		open.setMnemonic('O');
-		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_DOWN_MASK));
-		JMenuItem save = new JMenuItem("Save");
-		file.add(save);
-		save.setMnemonic('S');
-		save.addActionListener(this);
-		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-		JMenuItem saveas = new JMenuItem("Save as...");
-		saveas.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK | InputEvent.SHIFT_MASK));
-		file.add(saveas);
-		saveas.addActionListener(this);
-		JMenuItem quit = new JMenuItem("Quit");
-		file.add(quit);
-		quit.addActionListener(this);
-		quit.setMnemonic('Q');
-		quit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK));
-	}
-
-	private void buildEditMenu() {
-		JMenu edit = new JMenu("Edit");
-		menu.add(edit);
-		edit.setMnemonic('E');
-		// cut
-		cut = new JMenuItem("Cut");
-		cut.addActionListener(this);
-		cut.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK));
-		cut.setMnemonic('T');
-		edit.add(cut);
-		// copy
-		copy = new JMenuItem("Copy");
-		copy.addActionListener(this);
-		copy.setMnemonic('C');
-		copy.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
-		edit.add(copy);
-		// paste
-		paste = new JMenuItem("Paste");
-		paste.setMnemonic('P');
-		paste.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_V, InputEvent.CTRL_DOWN_MASK));
-		edit.add(paste);
-		paste.addActionListener(this);
-		// find
-		JMenuItem find = new JMenuItem("Find");
-		find.setMnemonic('F');
-		find.addActionListener(this);
-		edit.add(find);
-		find.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_DOWN_MASK));
-		// select all
-		JMenuItem sall = new JMenuItem("Select All");
-		sall.setMnemonic('A');
-		sall.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_A, InputEvent.CTRL_DOWN_MASK));
-		sall.addActionListener(this);
-		edit.add(sall);
-	}
+    private void createMenuBar() {
+        JMenuBar menu = new JMenuBar();
+		setJMenuBar(menu);
+		menu.add(MenuFactory.getMenuFactory(MenuType.FILE).getMenu(this));
+		menu.add(MenuFactory.getMenuFactory(MenuType.EDIT).getMenu(this));
+    }
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -246,6 +176,10 @@ public class Editor extends JFrame implements ActionListener, DocumentListener {
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 		changed = true;
+	}
+	
+	public JEditorPane getTextPane(){
+	    return this.textPane;
 	}
 
 }
