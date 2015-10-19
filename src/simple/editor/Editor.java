@@ -93,9 +93,5 @@ public class Editor extends JFrame implements DocumentListener {
 	public void setFile(File file){
 	    this.file = file;
 	}
-	
-	public static  void main(String[] args) {
-        new Editor();
-    }
 
 }
