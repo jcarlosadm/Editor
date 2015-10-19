@@ -28,20 +28,20 @@ public class Editor extends JFrame implements DocumentListener {
 
 	public Editor() {
 		super("Editor");
-		textPane = new JEditorPane();
-		add(new JScrollPane(textPane), BorderLayout.CENTER);
-		textPane.getDocument().addDocumentListener(this);
+		this.textPane = new JEditorPane();
+		this.add(new JScrollPane(this.textPane), BorderLayout.CENTER);
+		this.textPane.getDocument().addDocumentListener(this);
 
-		createMenuBar();
+		this.createMenuBar();
 
-		setSize(500, 500);
-		setVisible(true);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setSize(500, 500);
+		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 
     private void createMenuBar() {
         JMenuBar menu = new JMenuBar();
-		setJMenuBar(menu);
+		this.setJMenuBar(menu);
 		menu.add(MenuFactory.getMenuFactory(MenuType.FILE).getMenu(this));
 		menu.add(MenuFactory.getMenuFactory(MenuType.EDIT).getMenu(this));
     }
@@ -61,17 +61,17 @@ public class Editor extends JFrame implements DocumentListener {
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
-		changed = true;
+		this.changed = true;
 	}
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
-		changed = true;
+	    this.changed = true;
 	}
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
-		changed = true;
+	    this.changed = true;
 	}
 	
 	public JEditorPane getTextPane(){
