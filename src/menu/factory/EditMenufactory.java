@@ -1,6 +1,5 @@
 package menu.factory;
 
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import menu.menuitem.factory.CutMenuItemFactory;
 import menu.menuitem.factory.FindMenuItemFactory;
 import menu.menuitem.factory.PasteMenuItemFactory;
 import menu.menuitem.factory.SelectAllMenuItemFactory;
+import simple.editor.Editor;
 
 public class EditMenufactory extends MenuFactory {
 
@@ -32,13 +32,13 @@ public class EditMenufactory extends MenuFactory {
     }
 
     @Override
-    protected List<JMenuItem> getMenuItens(ActionListener listener) {
+    protected List<JMenuItem> getMenuItens(Editor editor) {
         List<JMenuItem> itens = new ArrayList<JMenuItem>();
-        itens.add((new CutMenuItemFactory()).getMenuItem(listener));
-        itens.add((new CopyMenuItemFactory()).getMenuItem(listener));
-        itens.add((new PasteMenuItemFactory()).getMenuItem(listener));
-        itens.add((new FindMenuItemFactory()).getMenuItem(listener));
-        itens.add((new SelectAllMenuItemFactory()).getMenuItem(listener));
+        itens.add((new CutMenuItemFactory()).getMenuItem(editor));
+        itens.add((new CopyMenuItemFactory()).getMenuItem(editor));
+        itens.add((new PasteMenuItemFactory()).getMenuItem(editor));
+        itens.add((new FindMenuItemFactory()).getMenuItem(editor));
+        itens.add((new SelectAllMenuItemFactory()).getMenuItem(editor));
         
         return itens;
     }

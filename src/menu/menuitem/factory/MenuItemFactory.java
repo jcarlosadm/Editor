@@ -1,18 +1,19 @@
 package menu.menuitem.factory;
 
-import java.awt.event.ActionListener;
-
-import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+
+import simple.editor.Editor;
+import menu.menuitem.MenuItem;
+import menu.menuitem.command.MenuItemCommand;
 
 public abstract class MenuItemFactory {
 
     public MenuItemFactory() {
     }
 
-    public JMenuItem getMenuItem(ActionListener listener) {
-
-        JMenuItem menuItem = new JMenuItem(this.getName());
+    public MenuItem getMenuItem(Editor parent) {
+        
+        MenuItem menuItem = new MenuItem(this.getName());
 
         menuItem.setName(this.getName());
         
@@ -22,8 +23,11 @@ public abstract class MenuItemFactory {
 
         menuItem.setAccelerator(KeyStroke.getKeyStroke(this.getShortcutKey(),
                 this.getShortcutModkey()));
-
-        menuItem.addActionListener(listener);
+        
+        menuItem.addActionListener(menuItem);
+        
+        menuItem.setParent(parent);
+        menuItem.setCommand(this.getCommand());
 
         return menuItem;
     }
@@ -37,4 +41,6 @@ public abstract class MenuItemFactory {
     protected abstract String getName();
     
     protected abstract boolean hasMnemonic();
+    
+    protected abstract MenuItemCommand getCommand();
 }

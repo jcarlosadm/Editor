@@ -3,12 +3,17 @@ package menu.menuitem.factory;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import menu.menuitem.command.FindCommand;
+import menu.menuitem.command.MenuItemCommand;
+
 public class FindMenuItemFactory extends MenuItemFactory {
 
     private static final String NAME = "Find";
     private static final char MNEMONIC = 'F';
     private static final int SHORTCUT_KEY = KeyEvent.VK_F;
     private static final int SHORTCUT_MOD_KEY = InputEvent.CTRL_DOWN_MASK;
+    
+    private static final MenuItemCommand COMMAND = new FindCommand();
 
     public FindMenuItemFactory() {
     }
@@ -36,6 +41,11 @@ public class FindMenuItemFactory extends MenuItemFactory {
     @Override
     protected boolean hasMnemonic() {
         return true;
+    }
+
+    @Override
+    protected MenuItemCommand getCommand() {
+        return COMMAND;
     }
 
 }

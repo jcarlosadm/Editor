@@ -3,12 +3,17 @@ package menu.menuitem.factory;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import menu.menuitem.command.MenuItemCommand;
+import menu.menuitem.command.OpenCommand;
+
 public class OpenMenuItemFactory extends MenuItemFactory {
 
     private static final String NAME = "Open";
     private static final char MNEMONIC = 'O';
     private static final int SHORTCUT_KEY = KeyEvent.VK_O;
     private static final int SHORTCUT_MOD_KEY = InputEvent.CTRL_DOWN_MASK;
+    
+    private static final MenuItemCommand COMMAND = new OpenCommand();
 
     public OpenMenuItemFactory() {
     }
@@ -36,6 +41,11 @@ public class OpenMenuItemFactory extends MenuItemFactory {
     @Override
     protected boolean hasMnemonic() {
         return true;
+    }
+
+    @Override
+    protected MenuItemCommand getCommand() {
+        return COMMAND;
     }
 
 }

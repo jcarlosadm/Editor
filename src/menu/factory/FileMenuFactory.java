@@ -1,6 +1,5 @@
 package menu.factory;
 
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import menu.menuitem.factory.OpenMenuItemFactory;
 import menu.menuitem.factory.QuitMenuItemFactory;
 import menu.menuitem.factory.SaveAsMenuItemFactory;
 import menu.menuitem.factory.SaveMenuItemFactory;
+import simple.editor.Editor;
 
 public class FileMenuFactory extends MenuFactory {
 
@@ -32,15 +32,15 @@ public class FileMenuFactory extends MenuFactory {
     }
 
     @Override
-    protected List<JMenuItem> getMenuItens(ActionListener listener) {
+    protected List<JMenuItem> getMenuItens(Editor editor) {
         
         List<JMenuItem> itens = new ArrayList<JMenuItem>();
         
-        itens.add((new NewMenuItemFactory()).getMenuItem(listener));
-        itens.add((new OpenMenuItemFactory()).getMenuItem(listener));
-        itens.add((new SaveMenuItemFactory()).getMenuItem(listener));
-        itens.add((new SaveAsMenuItemFactory()).getMenuItem(listener));
-        itens.add((new QuitMenuItemFactory()).getMenuItem(listener));
+        itens.add((new NewMenuItemFactory()).getMenuItem(editor));
+        itens.add((new OpenMenuItemFactory()).getMenuItem(editor));
+        itens.add((new SaveMenuItemFactory()).getMenuItem(editor));
+        itens.add((new SaveAsMenuItemFactory()).getMenuItem(editor));
+        itens.add((new QuitMenuItemFactory()).getMenuItem(editor));
         
         return itens;
     }

@@ -1,36 +1,30 @@
 package simple.editor;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.swing.JEditorPane;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuBar;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import menu.MenuType;
 import menu.factory.MenuFactory;
+import menu.menuitem.command.MenuItemCommand;
+import menu.menuitem.command.SaveAsCommand;
+import menu.menuitem.command.SaveCommand;
+import menu.menuitem.command.data.MenuItemCommandData;
 
 @SuppressWarnings("serial")
-public class Editor extends JFrame implements ActionListener, DocumentListener {
-
-	public static  void main(String[] args) {
-		new Editor();
-	}
+public class Editor extends JFrame implements DocumentListener {
 
 	private JEditorPane textPane;
 	private boolean changed = false;
 	private File file;
+	
+	private MenuItemCommand saveCommand = new SaveCommand();
+	private MenuItemCommand saveAsCommand = new SaveAsCommand();
 
 	public Editor() {
 		super("Editor");
@@ -51,116 +45,18 @@ public class Editor extends JFrame implements ActionListener, DocumentListener {
 		menu.add(MenuFactory.getMenuFactory(MenuType.FILE).getMenu(this));
 		menu.add(MenuFactory.getMenuFactory(MenuType.EDIT).getMenu(this));
     }
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		String action = e.getActionCommand();
-		if (action.equals("Quit")) {
-			System.exit(0);
-		} else if (action.equals("Open")) {
-			loadFile();
-		} else if (action.equals("Save")) {
-			saveFile();
-		} else if (action.equals("New")) {
-			newFile();
-		} else if (action.equals("Save as...")) {
-			saveAs("Save as...");
-		} else if (action.equals("Select All")) {
-			textPane.selectAll();
-		} else if (action.equals("Copy")) {
-			textPane.copy();
-		} else if (action.equals("Cut")) {
-			textPane.cut();
-		} else if (action.equals("Paste")) {
-			textPane.paste();
-		} else if (action.equals("Find")) {
-			FindDialog find = new FindDialog(this, true);
-			find.showDialog();
-		}
+	
+	public void executeSave(){
+	    MenuItemCommandData data = new MenuItemCommandData();
+	    data.setEditor(this);
+	    this.saveCommand.execute(data);
 	}
-
-	private void newFile() {
-		if (changed)
-			saveFile();
-		file = null;
-		textPane.setText("");
-		changed = false;
-		setTitle("Editor");
-	}
-
-	private void loadFile() {
-		JFileChooser dialog = new JFileChooser(System.getProperty("user.home"));
-		dialog.setMultiSelectionEnabled(false);
-		try {
-			int result = dialog.showOpenDialog(this);
-			if (result == JFileChooser.CANCEL_OPTION)
-				return;
-			if (result == JFileChooser.APPROVE_OPTION) {
-				if (changed)
-					saveFile();
-				file = dialog.getSelectedFile();
-				textPane.setText(readFile(file));
-				changed = false;
-				setTitle("Editor - " + file.getName());
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, e, "Error", JOptionPane.ERROR_MESSAGE);
-		}
-	}
-
-	private String readFile(File file) {
-		StringBuilder result = new StringBuilder();
-		try (	FileReader fr = new FileReader(file);		
-				BufferedReader reader = new BufferedReader(fr);) {
-			String line;
-			while ((line = reader.readLine()) != null) {
-				result.append(line + "\n");
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			JOptionPane.showMessageDialog(null, "Cannot read file !", "Error !", JOptionPane.ERROR_MESSAGE);
-		}
-		return result.toString();
-	}
-
-	private void saveFile() {
-		if (changed) {
-			int ans = JOptionPane.showConfirmDialog(null, "The file has changed. You want to save it?", "Save file",
-					JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-			if (ans == JOptionPane.NO_OPTION)
-				return;
-		}
-		if (file == null) {
-			saveAs("Save");
-			return;
-		}
-		String text = textPane.getText();
-		System.out.println(text);
-		try (PrintWriter writer = new PrintWriter(file);){
-			if (!file.canWrite())
-				throw new Exception("Cannot write file!");
-			writer.write(text);
-			changed = false;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void saveAs(String dialogTitle) {
-		JFileChooser dialog = new JFileChooser(System.getProperty("user.home"));
-		dialog.setDialogTitle(dialogTitle);
-		int result = dialog.showSaveDialog(this);
-		if (result != JFileChooser.APPROVE_OPTION)
-			return;
-		file = dialog.getSelectedFile();
-		try (PrintWriter writer = new PrintWriter(file);){
-			writer.write(textPane.getText());
-			changed = false;
-			setTitle("Editor - " + file.getName());
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+	
+	public void executeSaveAs(String dialogTitle){
+	    MenuItemCommandData data = new MenuItemCommandData();
+        data.setEditor(this);
+        data.setDialogTitle(dialogTitle);
+        this.saveAsCommand.execute(data);
 	}
 
 	@Override
@@ -181,5 +77,25 @@ public class Editor extends JFrame implements ActionListener, DocumentListener {
 	public JEditorPane getTextPane(){
 	    return this.textPane;
 	}
+	
+	public boolean isChanged(){
+	    return this.changed;
+	}
+	
+	public void setChanged(boolean changed){
+	    this.changed = changed;
+	}
+	
+	public File getFile(){
+	    return this.file;
+	}
+	
+	public void setFile(File file){
+	    this.file = file;
+	}
+	
+	public static  void main(String[] args) {
+        new Editor();
+    }
 
 }

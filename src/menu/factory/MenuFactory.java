@@ -1,12 +1,12 @@
 package menu.factory;
 
-import java.awt.event.ActionListener;
 import java.util.List;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import menu.MenuType;
+import simple.editor.Editor;
 
 public abstract class MenuFactory {
 
@@ -24,10 +24,10 @@ public abstract class MenuFactory {
         return null;
     }
     
-    public JMenu getMenu(ActionListener listener){
+    public JMenu getMenu(Editor editor){
         JMenu jMenu = this.getJMenuInstance();
         
-        List<JMenuItem> menuItems = this.getMenuItens(listener);
+        List<JMenuItem> menuItems = this.getMenuItens(editor);
         for (JMenuItem jMenuItem : menuItems) {
             jMenu.add(jMenuItem);
         }
@@ -37,7 +37,7 @@ public abstract class MenuFactory {
     
     protected abstract JMenu getJMenuInstance();
 
-    protected abstract List<JMenuItem> getMenuItens(ActionListener listener);
+    protected abstract List<JMenuItem> getMenuItens(Editor editor);
     
     
 
