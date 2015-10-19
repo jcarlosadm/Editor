@@ -9,12 +9,12 @@ import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import menu.MenuType;
-import menu.factory.MenuFactory;
-import menu.menuitem.command.MenuItemCommand;
-import menu.menuitem.command.SaveAsCommand;
-import menu.menuitem.command.SaveCommand;
-import menu.menuitem.command.data.MenuItemCommandData;
+import simple.menu.MenuType;
+import simple.menu.factory.MenuFactory;
+import simple.menu.menuitem.command.MenuItemCommand;
+import simple.menu.menuitem.command.SaveAsCommand;
+import simple.menu.menuitem.command.SaveCommand;
+import simple.menu.menuitem.command.data.MenuItemCommandData;
 
 @SuppressWarnings("serial")
 public class Editor extends JFrame implements DocumentListener {
