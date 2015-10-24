@@ -25,8 +25,10 @@ public class Editor extends JFrame implements DocumentListener {
 	
 	private MenuItemCommand saveCommand = new SaveCommand();
 	private MenuItemCommand saveAsCommand = new SaveAsCommand();
+	
+	private static Editor instance = null;
 
-	public Editor() {
+	private Editor() {
 		super("Editor");
 		this.textPane = new JEditorPane();
 		this.add(new JScrollPane(this.textPane), BorderLayout.CENTER);
@@ -35,8 +37,15 @@ public class Editor extends JFrame implements DocumentListener {
 		this.createMenuBar();
 
 		this.setSize(500, 500);
-		this.setVisible(true);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	}
+	
+	public static synchronized Editor getEditor(){
+	    if (instance == null) {
+            instance = new Editor();
+        }
+	    
+	    return instance;
 	}
 
     private void createMenuBar() {
@@ -93,5 +102,9 @@ public class Editor extends JFrame implements DocumentListener {
 	public void setFile(File file){
 	    this.file = file;
 	}
+	
+	public void run() {
+	    this.setVisible(true);
+    }
 
 }
