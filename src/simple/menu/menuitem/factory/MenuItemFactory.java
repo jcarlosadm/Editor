@@ -6,6 +6,10 @@ import simple.editor.Editor;
 import simple.menu.menuitem.MenuItem;
 import simple.menu.menuitem.command.MenuItemCommand;
 
+/**
+ * MenuItemFactory
+ * TODO Abstract factory pattern
+ */
 public abstract class MenuItemFactory {
 
     public MenuItemFactory() {

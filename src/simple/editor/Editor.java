@@ -41,6 +41,10 @@ public class Editor extends JFrame implements DocumentListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
+    /**
+     * TODO Singleton pattern
+     * @return editor instance
+     */
     public static synchronized Editor getEditor() {
         if (instance == null) {
             instance = new Editor();

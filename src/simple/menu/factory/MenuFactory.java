@@ -8,10 +8,19 @@ import javax.swing.JMenuItem;
 import simple.editor.Editor;
 import simple.menu.MenuType;
 
+/**
+ * MenuFactory
+ * TODO Abstract factory pattern
+ */
 public abstract class MenuFactory {
 
     protected MenuFactory() {}
     
+    /**
+     * TODO factory method pattern
+     * @param menuType
+     * @return get MenuFactory instance
+     */
     public static MenuFactory getMenuFactory(MenuType menuType){
         
         if (menuType.equals(MenuType.FILE)) {
